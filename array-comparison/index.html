@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Array Comparison Tool</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #2563eb;
+        --primary-hover: #1d4ed8;
+        --bg: #f8fafc;
+        --card-bg: #ffffff;
+        --text: #1e293b;
+        --border: #e2e8f0;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.5;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 32px auto;
+        background: var(--card-bg);
+        padding: 32px;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      }
+
+      h2 {
+        margin: 0 0 24px 0;
+        color: var(--text);
+        font-size: 1.875rem;
+      }
+
+      .arrays-container {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .array-input-group {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+      }
+
+      .array-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .array-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+
+      .array-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .array-title input {
+        font-family: "Inter", sans-serif;
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 4px 8px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        background: transparent;
+        color: var(--text);
+        width: 120px;
+      }
+
+      .array-title input:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: var(--bg);
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 120px;
+        font-size: 0.875rem;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        resize: vertical;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+
+      textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+
+      label {
+        font-weight: 500;
+        color: var(--text);
+      }
+
+      .button-group {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: "Inter", sans-serif;
+      }
+
+      .primary-button {
+        background: var(--primary);
+        color: white;
+      }
+
+      .primary-button:hover {
+        background: var(--primary-hover);
+      }
+
+      .secondary-button {
+        background: var(--bg);
+        color: var(--text);
+        border: 1px solid var(--border);
+      }
+
+      .secondary-button:hover {
+        background: var(--border);
+      }
+
+      .remove-button {
+        background: #fee2e2;
+        color: #dc2626;
+        padding: 6px 12px;
+        font-size: 0.75rem;
+      }
+
+      .remove-button:hover {
+        background: #fecaca;
+      }
+
+      .result {
+        margin-top: 32px;
+        background: var(--bg);
+        border-radius: 12px;
+        padding: 24px;
+      }
+
+      .result h3 {
+        margin: 0 0 16px 0;
+        font-size: 1.25rem;
+      }
+
+      .diff {
+        background: var(--card-bg);
+        padding: 16px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        border: 1px solid var(--border);
+      }
+
+      .diff:last-child {
+        margin-bottom: 0;
+      }
+
+      .diff-header {
+        font-weight: 600;
+        color: var(--primary);
+        display: block;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .diff-content {
+        display: flex;
+        gap: 24px;
+      }
+
+      .diff-section {
+        flex: 1;
+      }
+
+      .diff-section h4 {
+        margin: 0 0 8px 0;
+        font-size: 0.875rem;
+        color: var(--text);
+      }
+
+      .diff-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+
+      .diff-list li {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.875rem;
+        margin-bottom: 4px;
+        background: var(--bg);
+      }
+
+      .error-message {
+        color: #dc2626;
+        background: #fee2e2;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        font-size: 0.875rem;
+      }
+
+      .json-error {
+        border-color: #dc2626 !important;
+        background: #fef2f2 !important;
+      }
+
+      .json-error:focus {
+        box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Array Comparison Tool</h2>
+      <div class="arrays-container" id="arraysContainer">
+        <div class="array-input-group">
+          <div class="array-col">
+            <div class="array-header">
+              <div class="array-title">
+                <input
+                  type="text"
+                  value="Array 1"
+                  class="array-name"
+                  data-array-id="1"
+                />
+              </div>
+            </div>
+            <textarea
+              id="array1"
+              placeholder="Enter comma-separated values or JSON array"
+              oninput="validateAndCompare()"
+            ></textarea>
+          </div>
+          <div class="array-col">
+            <div class="array-header">
+              <div class="array-title">
+                <input
+                  type="text"
+                  value="Array 2"
+                  class="array-name"
+                  data-array-id="2"
+                />
+              </div>
+            </div>
+            <textarea
+              id="array2"
+              placeholder="Enter comma-separated values or JSON array"
+              oninput="validateAndCompare()"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="button-group">
+        <button class="secondary-button" onclick="addArrayInput()">
+          Add Another Array
+        </button>
+      </div>
+      <div class="result" id="result"></div>
+    </div>
+    <script src="compare.js"></script>
+  </body>
+</html>
